@@ -17,13 +17,13 @@ loadBtn.addEventListener('click', onLoadMore);
 async function onFormSearch(event) {
   event.preventDefault();
   renderMarkup.reset();
-  ImagesAPIService.query = event.currentTarget.searchQuery.value.trim();
+  imagesAPIService.query = event.currentTarget.searchQuery.value.trim();
 
-  if (ImagesAPIService.query === '') {
+  if (imagesAPIService.query === '') {
     loadBtn.classList.add('is-hidden');
     return Notiflix.Notify.info('Your query is empty. Try again!');
   }
-  ImagesAPIService.resetPage();
+  imagesAPIService.resetPage();
 
   try {
     loadBtn.classList.remove('is-hidden');
@@ -47,14 +47,14 @@ async function onLoadMore() {
 async function fetchImages() {
   try {
     loadBtn.disabled = true;
-    const images = await ImagesAPIService.fetchImages();
+    const images = await imagesAPIService.fetchImages();
     renderMarkup.items = images;
     renderMarkup.render();
   } catch {
     return Notiflix.Notify.failure(error.message);
   }
 
-  if (ImagesAPIService.endOfHits) {
+  if (imagesAPIService.endOfHits) {
     return loadBtn.classList.add('is-hidden');
   }
   loadBtn.disabled = false;
