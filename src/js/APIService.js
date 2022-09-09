@@ -64,6 +64,11 @@ export default class ImagesAPIService {
     }
   }
 
-  
+  imagesFinished() {
+    if (this.page === this.totalPages) {
+      this.endOfHits = true;
+      Notiflix.Notify.info("These were all the results");
+    }
+  }
 };
 
