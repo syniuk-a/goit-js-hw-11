@@ -22,5 +22,48 @@ export default class ImagesAPIService {
     this.searchQuery = newQuery;
   }
 
+  getOptions() {
+    const options = new URLSearchParams({
+      key: `${API_KEY}`,
+      q: `${this / this.searchQuery}`,
+      page: `${this.page}`,
+      per_page: `${this.PER_PAGE}`,
+      image_type: 'photo',
+      orientation: 'horisontal',
+      safesearch: true,
+    });
+    return options;
+  }
+  resetPage() {
+    this.page = 1;
+  }
+  resetEnd() {
+    this.endOfHits = false;
+  }
+
+  async fetchImages() {
+    try {
+      const getOptions = this.getOptions();
+      const response = await axios.get(`?${getOptions}`);
+      const data = await response.data;
+
+      this.totalHits = data.totalHits;
+      this.totalPages = Math.ceil(this.totalHits / this.PER_PAGE);
+      this.resetEnd();
+
+      if (data.total === 0) {
+        throw new Error('Oops, something went wrong. Repeat your request');
+      }
+
+      const images = await data.hits;
+      this.page += 1;
+      this.imagesFinished();
+      return images;
+    } catch {
+      Notiflix.Notify.failure(error.message);
+    }
+  }
+
   
-}
+};
+
