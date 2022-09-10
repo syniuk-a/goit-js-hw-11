@@ -25,7 +25,7 @@ export default class ImagesAPIService {
   getOptions() {
     const options = new URLSearchParams({
       key: `${API_KEY}`,
-      q: `${this / this.searchQuery}`,
+      q: `${this.searchQuery}`,
       page: `${this.page}`,
       per_page: `${this.PER_PAGE}`,
       image_type: 'photo',
@@ -51,14 +51,14 @@ export default class ImagesAPIService {
       this.totalPages = Math.ceil(this.totalHits / this.PER_PAGE);
       this.resetEnd();
 
-      if (data.total === 0) {
-        throw new Error('Oops, something went wrong. Repeat your request');
-      }
+        if (data.total === 0) {
+          throw new Error('Oops, something went wrong. Repeat your request');
+        }
 
-      const images = await data.hits;
-      this.page += 1;
-      this.imagesFinished();
-      return images;
+        const images = await data.hits;
+        this.page += 1;
+        this.imagesFinished();
+        return images;
     } catch {
       Notiflix.Notify.failure(error.message);
     }
@@ -70,5 +70,5 @@ export default class ImagesAPIService {
       Notiflix.Notify.info("These were all the results");
     }
   }
-};
+}
 
